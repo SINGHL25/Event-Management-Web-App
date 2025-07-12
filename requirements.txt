@@ -1,5 +1,3 @@
-fastapi
+streamlit
 pymongo
 python-dotenv
-uvicorn
-jinja2
