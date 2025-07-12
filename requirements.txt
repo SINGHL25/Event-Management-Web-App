@@ -1,4 +1,6 @@
-# requirements.txt for Streamlit Cloud
-streamlit>=1.30.0
+fastapi
+uvicorn
 pymongo[srv]
+jinja2
 python-dotenv
+streamlit
