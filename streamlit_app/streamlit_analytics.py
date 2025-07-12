@@ -1,4 +1,6 @@
 # streamlit_analytics.py
+pip install pymongo python-dotenv
+
 from pymongo import MongoClient
 import pandas as pd
 import streamlit as st
