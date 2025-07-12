@@ -1,45 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>EventHub</title>
-  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
   <h1>🎉 Welcome to EventHub</h1>
-  <form id="eventForm">
-    <input type="text" placeholder="Event title" name="title" required />
-    <input type="text" placeholder="Description" name="description" required />
-    <input type="datetime-local" name="date" required />
-    <input type="text" placeholder="Location" name="location" required />
-    <input type="text" placeholder="Your name" name="created_by" required />
-    <button type="submit">Create Event</button>
-  </form>
-
-  <div id="eventsList"></div>
-
-  <script>
-    async function loadEvents() {
-      const res = await fetch("http://localhost:8000/events");
-      const data = await res.json();
-      const container = document.getElementById("eventsList");
-      container.innerHTML = data.map(e => `<p><b>${e.title}</b> - ${e.date}</p>`).join("");
-    }
-
-    document.getElementById("eventForm").onsubmit = async (e) => {
-      e.preventDefault();
-      const formData = new FormData(e.target);
-      const obj = Object.fromEntries(formData);
-      await fetch("http://localhost:8000/events", {
-        method: "POST",
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(obj)
-      });
-      loadEvents();
-    }
-
-    loadEvents();
-  </script>
+  <div id="events"></div>
+  <script src="/static/app.js"></script>
 </body>
 </html>
 
