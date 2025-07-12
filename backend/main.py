@@ -1,23 +1,28 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
-from backend.routes import users, events
+from backend.routes import events, users
 
 app = FastAPI()
 
-# Allow frontend to connect
+# CORS (allow frontend access)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"]
+    allow_headers=["*"],
 )
 
-# Include routes
-app.include_router(users.router)
-app.include_router(events.router)
+# API Routers
+app.include_router(events.router, prefix="/api/events", tags=["Events"])
+app.include_router(users.router, prefix="/api/users", tags=["Users"])
+
+# Static and Template
+app.mount("/static", StaticFiles(directory="frontend/public"), name="static")
+templates = Jinja2Templates(directory="frontend/templates")
 
 @app.get("/")
-def root():
+def read_root():
     return {"msg": "Welcome to EventHub API"}
 
