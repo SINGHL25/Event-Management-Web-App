@@ -2,25 +2,14 @@ from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
 load_dotenv()
 
-# ✅ Correct way to load URI
 MONGO_URI = os.getenv("MONGODB_URI")
-
 if not MONGO_URI:
-    raise Exception("❌ MongoDB URI not set in .env file")
+    raise Exception("MongoDB URI not found")
 
-# Initialize MongoDB client
 client = MongoClient(MONGO_URI)
-db = client["eventhub"]  # Database name
-events_collection = db["events"]  # Collection name
+db = client["eventhub"]
 
-# Optional: test connection
-try:
-    client.admin.command('ping')
-    print("✅ MongoDB connection successful")
-except Exception as e:
-    print("❌ MongoDB connection failed:", e)
 
 
