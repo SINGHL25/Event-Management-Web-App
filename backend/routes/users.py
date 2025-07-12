@@ -1,9 +1,10 @@
-```python
 from fastapi import APIRouter
+from backend.models import User
+from backend.db.mongo import db
 
 router = APIRouter()
 
-@router.get("/users")
-def get_users():
-    return {"message": "List users (to be implemented)"}
-```
+@router.post("/")
+def create_user(user: User):
+    db["users"].insert_one(user.dict())
+    return {"message": "User created"}
