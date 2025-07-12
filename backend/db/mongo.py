@@ -5,7 +5,8 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
-MONGO_URI = os.getenv("MONGODB_URI=mongodb+srv://akhisingh1989:WelcomeASI2024%23%40@cluster0.tlxm8tv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+# ✅ Correct way to load URI
+MONGO_URI = os.getenv("MONGODB_URI")
 
 if not MONGO_URI:
     raise Exception("❌ MongoDB URI not set in .env file")
@@ -21,4 +22,5 @@ try:
     print("✅ MongoDB connection successful")
 except Exception as e:
     print("❌ MongoDB connection failed:", e)
+
 
