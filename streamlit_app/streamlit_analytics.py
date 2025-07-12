@@ -1,16 +1,48 @@
-# streamlit_analytics.py
-pip install pymongo python-dotenv
+# streamlit_app.py
 
-from pymongo import MongoClient
-import pandas as pd
 import streamlit as st
+from db import events_collection
 
-client = MongoClient("mongodb+srv://akhisingh1989:WelcomeASI2024%23%40@cluster0.tlxm8tv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
-events = list(client["eventhub"]["events"].find({}))
-df = pd.DataFrame(events)
+st.set_page_config(page_title="EventHub Dashboard", layout="wide")
+st.title("📊 EventHub Analytics Dashboard")
 
-st.title("📊 Event Dashboard")
-st.dataframe(df)
+# Load events from MongoDB
+events = list(events_collection.find())
 
-st.bar_chart(df['location'].value_counts())
+if not events:
+    st.warning("No events found in the database.")
+else:
+    # Display raw data
+    st.subheader("Raw Event Data")
+    st.dataframe(events)
+
+    # Simple chart by event type (you can enhance this later)
+    st.subheader("Event Count by Category")
+    category_counts = {}
+    for event in events:
+        category = event.get("category", "Unknown")
+        category_counts[category] = category_counts.get(category, 0) + 1
+
+    st.bar_chart(category_counts)
+
+    # Add new event
+    st.subheader("➕ Add New Event")
+    with st.form("event_form"):
+        name = st.text_input("Event Name")
+        category = st.selectbox("Category", ["Conference", "Workshop", "Concert", "Meetup", "Other"])
+        location = st.text_input("Location")
+        submit = st.form_submit_button("Add Event")
+
+        if submit:
+            if name and location:
+                new_event = {
+                    "name": name,
+                    "category": category,
+                    "location": location
+                }
+                events_collection.insert_one(new_event)
+                st.success(f"Event '{name}' added successfully! Refresh to see the update.")
+            else:
+                st.error("Please fill in all required fields.")
+
 
